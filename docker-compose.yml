@@ -1,0 +1,29 @@
+services:
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: productsdb
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+  app:
+    build: .
+    env_file:
+      - .env
+    environment:
+      # You can add non-secret defaults here or rely on .env
+      SPRING_PROFILES_ACTIVE: local
+      # When running inside Docker Compose, point DB_HOST to the 'db' service
+      DB_HOST: db
+    depends_on:
+      - db
+    ports:
+      - "8080:8080"
+
+volumes:
+  db_data:
+
