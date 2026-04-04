@@ -3,20 +3,17 @@ package io.resousadev.productsapi.config;
 import lombok.extern.slf4j.Slf4j;
 import org.flywaydb.core.Flyway;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.flyway.FlywayProperties;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.DependsOn;
-
-import javax.sql.DataSource;
 
 @Slf4j
 @Configuration
 public class FlywayConfig {
 
     @Bean
+    @ConditionalOnProperty(name = "spring.datasource.driver-class-name", havingValue = "org.postgresql.Driver")
     public Flyway flyway(
-            DataSource dataSource,
             @Value("${spring.datasource.url}") String url,
             @Value("${spring.datasource.username}") String user,
             @Value("${spring.datasource.password}") String password) {
@@ -36,4 +33,5 @@ public class FlywayConfig {
     }
 
 }
+
 
